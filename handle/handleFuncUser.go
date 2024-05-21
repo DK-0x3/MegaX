@@ -17,7 +17,7 @@ import (
 
 var db *sqlx.DB
 var err error
-const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=\"MegaX\" sslmode=disable"
+const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=mega_xxx sslmode=disable"
 
 
 func InitDB() {
@@ -32,7 +32,7 @@ func HandleUsersGET(c *gin.Context) {
 
 	//users = make([]database.User, 0)
 
-	err := db.Select(&users, `SELECT * FROM user`)
+	err := db.Select(&users, `SELECT * FROM users`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
