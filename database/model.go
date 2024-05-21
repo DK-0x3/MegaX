@@ -3,13 +3,14 @@ package database
 import "database/sql"
 
 type User struct {
-	Id       int    `db:"id"`
-	Phone    string `db:"phone"`
-	Password string `db:"password"`
-	Name     string `db:"name"`
-	Surname  string `db:"surname"`
-	Id_Addr  sql.NullInt32    `db:"id_addr"`
-	Role string `db:"role"`
+
+	Id       int           `db:"id"`
+	Phone    string        `db:"phone"`
+	Password string        `db:"password"`
+	Name     string        `db:"name"`
+	Surname  string        `db:"surname"`
+	Id_Addr  sql.NullInt32 `db:"id_addr"`
+	Role     string        `db:"role"`
 }
 
 type Addres_User struct {
@@ -48,3 +49,8 @@ type Product struct {
 	Discription string `db:"discription"`
 	Category    int    `db:"category"`
 }
+
+type IPResponse struct {
+	IP string `json:"ip"`
+}
+
