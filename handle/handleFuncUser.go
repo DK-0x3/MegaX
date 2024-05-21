@@ -18,6 +18,7 @@ import (
 var db *sqlx.DB
 var err error
 
+
 const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=mega_xxx sslmode=disable"
 
 func InitDB() {

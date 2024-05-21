@@ -3,6 +3,7 @@ package database
 import "database/sql"
 
 type User struct {
+
 	Id       int           `db:"id"`
 	Phone    string        `db:"phone"`
 	Password string        `db:"password"`
@@ -52,3 +53,4 @@ type Product struct {
 type IPResponse struct {
 	IP string `json:"ip"`
 }
+
