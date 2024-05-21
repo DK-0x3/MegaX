@@ -38,3 +38,4 @@ func LogFile(c *gin.Engine) {
 	}
 	c.Use(gin.LoggerWithWriter(file))
 }
+
