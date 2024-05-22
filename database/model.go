@@ -11,6 +11,7 @@ type User struct {
 	Surname  string        `db:"surname"`
 	Id_Addr  sql.NullInt32 `db:"id_addr"`
 	Role     string        `db:"role"`
+	IpAddres sql.NullString `db:"ip_addres"`
 }
 
 type Addres_User struct {
