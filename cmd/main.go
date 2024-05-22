@@ -5,29 +5,54 @@ import (
 	"MegaX/middlewares"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
+var db *sqlx.DB
+
 var server *gin.Engine
 
+const connectionString = "host=127.0.0.1 port=5432 user=postgres password=akeceqm dbname=mega_xxx sslmode=disable"
+
 func main() {
+	var err error
+	db, err = handle.InitDB(connectionString)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
 	server = gin.Default()
 	middlewares.LogFile(server)
-	handle.InitDB()
 
-  //? Работа с юзерами
-	server.GET("/users", handle.HandleUsersGET)
-	server.POST("/users", handle.HandleUserPOST)
-	server.PUT("/users", handle.HandleUserPUT)
-	server.DELETE("/users", handle.HandleUserDEL)
+	//? Работа с юзерами
+	server.GET("/users", func(c *gin.Context) {
+		handle.HandleUsersGET(c, db)
+	})
+	server.POST("/users", func(c *gin.Context) {
+		handle.HandleUserPOST(c, db)
+	})
+	server.PUT("/users", func(c *gin.Context) {
+		handle.HandleUserPUT(c, db)
+	})
+	server.DELETE("/users", func(c *gin.Context) {
+		handle.HandleUserDEL(c, db)
+	})
 
 	//? Работа с аддресами
-	server.GET("/addresUser", handle.HandleAddresGET)
-	server.POST("/addresUser", handle.HandleAddresPOST)
-	server.DELETE("/addresUser", handle.HandleAddresDEL)
-	server.PUT("addresUser", handle.HandleAddresPUT)
-
-
+	server.GET("/addresUser", func(c *gin.Context) {
+		handle.HandleAddresGET(c, db)
+	})
+	server.POST("/addresUser", func(c *gin.Context) {
+		handle.HandleAddresPOST(c, db)
+	})
+	server.DELETE("/addresUser", func(c *gin.Context) {
+		handle.HandleAddresDEL(c, db)
+	})
+	server.PUT("/addresUser", func(c *gin.Context) {
+		handle.HandleAddresPUT(c, db)
+	})
 
 	server.Run(":8080")
 
