@@ -15,10 +15,19 @@ func main() {
 	middlewares.LogFile(server)
 	handle.InitDB()
 
+  //? Работа с юзерами
 	server.GET("/users", handle.HandleUsersGET)
 	server.POST("/users", handle.HandleUserPOST)
 	server.PUT("/users", handle.HandleUserPUT)
 	server.DELETE("/users", handle.HandleUserDEL)
+
+	//? Работа с аддресами
+	server.GET("/addresUser", handle.HandleAddresGET)
+	server.POST("/addresUser", handle.HandleAddresPOST)
+	server.DELETE("/addresUser", handle.HandleAddresDEL)
+	server.PUT("addresUser", handle.HandleAddresPUT)
+
+
 
 	server.Run(":8080")
 

@@ -3,7 +3,6 @@ package database
 import "database/sql"
 
 type User struct {
-
 	Id       int           `db:"id"`
 	Phone    string        `db:"phone"`
 	Password string        `db:"password"`
@@ -12,6 +11,7 @@ type User struct {
 	Id_Addr  sql.NullInt32 `db:"id_addr"`
 	Role     string        `db:"role"`
 	IpAddres sql.NullString `db:"ip_addres"`
+
 }
 
 type Addres_User struct {
