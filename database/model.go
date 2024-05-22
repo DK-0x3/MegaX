@@ -3,6 +3,7 @@ package database
 import "database/sql"
 
 type User struct {
+<<<<<<< HEAD
 	Id       int            `db:"id"`
 	Phone    string         `db:"phone"`
 	Password string         `db:"password"`
@@ -11,6 +12,16 @@ type User struct {
 	Id_Addr  sql.NullInt32  `db:"id_addr"`
 	Role     string         `db:"role"`
 	IpAddres sql.NullString `db:"ip_addres"`
+=======
+
+	Id       int           `db:"id"`
+	Phone    string        `db:"phone"`
+	Password string        `db:"password"`
+	Name     string        `db:"name"`
+	Surname  string        `db:"surname"`
+	Id_Addr  sql.NullInt32 `db:"id_addr"`
+	Role     string        `db:"role"`
+>>>>>>> 0315d67fc7032d38c4d2a701b0c0fb1659fef4c0
 }
 
 type Addres_User struct {
@@ -53,3 +64,4 @@ type Product struct {
 type IPResponse struct {
 	IP string `json:"ip"`
 }
+

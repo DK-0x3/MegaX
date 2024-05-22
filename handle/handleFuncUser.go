@@ -12,7 +12,12 @@ import (
 var db *sqlx.DB
 var err error
 
+<<<<<<< HEAD
 const connectionString = "host=127.0.0.1 port=5432 user=postgres password=akeceqm dbname=mega_xxx sslmode=disable"
+=======
+
+const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=mega_xxx sslmode=disable"
+>>>>>>> 0315d67fc7032d38c4d2a701b0c0fb1659fef4c0
 
 func InitDB() {
 	db, err = sqlx.Open("postgres", connectionString)
