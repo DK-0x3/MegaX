@@ -16,8 +16,9 @@ func main() {
 	handle.InitDB()
 
 	server.GET("/users", handle.HandleUsersGET)
-	//server.POST("/users", handle.HandleUserPOST)
-	//server.POST("/authorization", handle.HandleAuthorizationAcc)
+	server.POST("/users", handle.HandleUserPOST)
+	server.PUT("/users", handle.HandleUserPUT)
+	server.DELETE("/users", handle.HandleUserDEL)
 
 	server.Run(":8080")
 
