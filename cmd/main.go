@@ -16,8 +16,12 @@ func main() {
 	handle.InitDB()
 
 	server.GET("/users", handle.HandleUsersGET)
-	//server.POST("/users", handle.HandleUserPOST)
-	//server.POST("/authorization", handle.HandleAuthorizationAcc)
+
+	//? Работа с аддресами
+	server.GET("/addresUser", handle.HandleAddresGET)
+	server.POST("/addresUser", handle.HandleAddresPOST)
+	server.DELETE("/addresUser", handle.HandleAddresDEL)
+	server.PUT("addresUser", handle.HandleAddresPUT)
 
 	server.Run(":8080")
 
