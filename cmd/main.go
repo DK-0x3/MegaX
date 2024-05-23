@@ -54,6 +54,20 @@ func main() {
 		handle.HandleAddresPUT(c, db)
 	})
 
+	//? Работа с категориями
+	server.GET("/category", func(c *gin.Context) {
+		handle.HandleCategoryGET(c, db)
+	})
+	server.POST("/category", func(c *gin.Context) {
+		handle.HandleCategoryPOST(c, db)
+	})
+	server.DELETE("/category", func(c *gin.Context) {
+		handle.HandleCategoryDEL(c, db)
+	})
+	server.PUT("/category", func(c *gin.Context) {
+		handle.HandleCategoryPUT(c, db)
+	})
+
 	server.Run(":8080")
 
 }
