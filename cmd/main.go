@@ -58,6 +58,9 @@ func main() {
 	server.GET("/category", func(c *gin.Context) {
 		handle.HandleCategoryGET(c, db)
 	})
+	server.GET("/categoryId", func(c *gin.Context) {
+		handle.HandleCategoryGETid(c, db)
+	})
 	server.POST("/category", func(c *gin.Context) {
 		handle.HandleCategoryPOST(c, db)
 	})
@@ -68,6 +71,28 @@ func main() {
 		handle.HandleCategoryPUT(c, db)
 	})
 
+	//? Работа с продуктом
+	server.GET("/product", func(c *gin.Context) {
+		handle.HandleProductGET(c, db)
+	})
+	server.GET("/productId", func(c *gin.Context) {
+		handle.HandleProductGETid(c, db)
+	})
+	server.GET("/productCategory", func(c *gin.Context) {
+		handle.HandleProductGETCategory(c, db)
+	})
+	server.GET("/productMainCategory", func(c *gin.Context) {
+		handle.HandleProductGETMainCategory(c, db)
+	})
+	server.POST("/product", func(c *gin.Context) {
+		handle.HandleProductPOST(c, db)
+	})
+	server.DELETE("/product", func(c *gin.Context) {
+		handle.HandleProductDEL(c, db)
+	})
+	server.PUT("/product", func(c *gin.Context) {
+		handle.HandleProductPUT(c, db)
+	})
 	server.Run(":8080")
 
 }
