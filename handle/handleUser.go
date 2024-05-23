@@ -87,6 +87,7 @@ func HandleUserDEL(c *gin.Context, db *sqlx.DB) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	var deletedUser database.User
@@ -110,11 +111,13 @@ func HandleUserPUT(c *gin.Context, db *sqlx.DB) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	err := db.Get(&userDB, `SELECT * FROM users WHERE id = $1`, user.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	if user.Phone != "" {
@@ -139,6 +142,7 @@ func HandleUserPUT(c *gin.Context, db *sqlx.DB) {
 	_, err = db.Exec(`UPDATE users SET phone = $1, password = $2, name = $3, surname = $4, id_addr = $5, role = $6 WHERE id = $7`, userDB.Phone, userDB.Password, userDB.Name, userDB.Surname, userDB.Id_Addr, userDB.Role, userDB.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, &userDB)
@@ -151,10 +155,12 @@ func HandleUserId_GET(c *gin.Context, db *sqlx.DB) {
 	err := db.Select(&Users, `SELECT * FROM users`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	for _, val := range Users {

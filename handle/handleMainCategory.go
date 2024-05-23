@@ -19,6 +19,7 @@ func HandleMainCategoryGET(c *gin.Context, db *sqlx.DB) {
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 	c.JSON(http.StatusOK, &MainCat)
 }
@@ -47,11 +48,13 @@ func HandleMainCategoryPUT(c *gin.Context, db *sqlx.DB) {
 
 	if err := c.ShouldBindJSON(&MainCat); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	err := db.Get(&MainCatDB, `SELECT * FROM main_category WHERE id = $1`, MainCat.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	if MainCat.Name != "" {
@@ -61,6 +64,7 @@ func HandleMainCategoryPUT(c *gin.Context, db *sqlx.DB) {
 	_, err = db.Exec(`UPDATE main_category SET name = $1 WHERE id = $2`, MainCatDB.Name, MainCatDB.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, &MainCatDB)
@@ -72,6 +76,7 @@ func HandleMainCategoryDEL(c *gin.Context, db *sqlx.DB) {
 
 	if err := c.ShouldBindJSON(&MainCat); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	var deletedCategory database.Main_Category
@@ -97,11 +102,13 @@ func HandleMainCategoryAndCategory(c *gin.Context, db *sqlx.DB) {
 	err := db.Select(&MainCat, `SELECT * FROM main_category`) 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		return
 	}
 
 	err = db.Select(&Cat, `SELECT * FROM category`) 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		return
 	}
 
 	for _, mainVal := range MainCat {
@@ -128,10 +135,12 @@ func HandleMainCategoryId_GET(c *gin.Context, db *sqlx.DB) {
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	for _, val := range MainCat {
@@ -151,16 +160,19 @@ func HandleMainCategoryAndCategoryId_GET(c *gin.Context, db *sqlx.DB) {
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 
 	err = db.Select(&Cat, `SELECT * FROM category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
 	}
 	
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	for _, mainVal := range MainCat {
