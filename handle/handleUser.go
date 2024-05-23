@@ -94,12 +94,17 @@ func HandleUserDEL(c *gin.Context, db *sqlx.DB) {
 
 	err := db.QueryRow(`DELETE FROM users WHERE id = $1`, user.Id).Scan(&deletedUser.Id, &deletedUser.Name)
 	if err != nil {
+
     	if err == sql.ErrNoRows {
        		c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
     	} else {
     	    c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
     	}
     return
+
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+
 	}
     
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedUser})

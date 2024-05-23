@@ -75,6 +75,7 @@ func HandleAddresDEL(c *gin.Context, db *sqlx.DB) {
 func HandleAddresPUT(c *gin.Context, db *sqlx.DB) {
 	var addres database.Addres_User
 	var addresDB database.Addres_User
+
 	if err := c.ShouldBindJSON(&addres); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
