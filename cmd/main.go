@@ -42,11 +42,13 @@ func main() {
 	server.DELETE("/users", func(c *gin.Context) {
 		handle.HandleUserDEL(c, db)
 	})
+
+	server.GET("/users/:role", func(c *gin.Context) {
+		handle.HandleUsersIsRoleGET(c, db)
+	})
+
 	server.GET("/user/:id", func (c *gin.Context) {
 		handle.HandleUserId_GET(c, db)
-	})
-	server.GET("/users/:role", func (c *gin.Context) {
-		handle.HandleUsersIsRoleGET(c, db)
 	})
 
 
@@ -65,25 +67,27 @@ func main() {
 	})
 
 	//? Работа с MainCategory
-	server.GET("/maincategory", func (c *gin.Context)  {
+
+	server.GET("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryGET(c, db)
 	})
-	server.POST("/maincategory", func (c *gin.Context)  {
+	server.POST("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryPOST(c, db)
 	})
-	server.PUT("/maincategory", func (c *gin.Context) {
+	server.PUT("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryPUT(c, db)
 	})
-	server.DELETE("/maincategory", func (c *gin.Context) {
+	server.DELETE("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryDEL(c, db)
 	})
-	server.GET("/maincategory/category", func (c *gin.Context) {
+	server.GET("/maincategory/category", func(c *gin.Context) {
 		handle.HandleMainCategoryAndCategory(c, db)
 	})
-	server.GET("/maincategory/:id", func (c *gin.Context) {
+	server.GET("/maincategory/:id", func(c *gin.Context) {
 		handle.HandleMainCategoryId_GET(c, db)
 	})
 	server.GET("/maincategory/:id/category", func (c *gin.Context) {
+
 		handle.HandleMainCategoryAndCategoryId_GET(c, db)
 	})
 
@@ -107,6 +111,24 @@ func main() {
 	//? Работа с продуктом
 	server.GET("/product", func(c *gin.Context) {
 		handle.HandleProductGET(c, db)
+	})
+	server.GET("/product/price/max", func(c *gin.Context) {
+		handle.HandleGetProductPriceMax(c, db)
+	})
+	server.GET("/product/price/min", func(c *gin.Context) {
+		handle.HandleGetProductPriceMin(c, db)
+	})
+	server.GET("/product/name/desc", func(c *gin.Context) {
+		handle.HandleGetProductNameDesc(c, db)
+	})
+	server.GET("/product/name/asc", func(c *gin.Context) {
+		handle.HandleGetProductNameAsc(c, db)
+	})
+	server.GET("/product/category/desc", func(c *gin.Context) {
+		handle.HandleGetProductCategoryDesc(c, db)
+	})
+	server.GET("/product/category/asc", func(c *gin.Context) {
+		handle.HandleGetProductCategoryAsc(c, db)
 	})
 	server.GET("/product/:id", func(c *gin.Context) {
 		handle.HandleProductGETid(c, db)

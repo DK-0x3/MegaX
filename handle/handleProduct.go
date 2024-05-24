@@ -26,9 +26,9 @@ func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
-	
+
 	params := c.Param("params")
-	
+
 	if params == "true" {
 		var parameters []database.Parameters
 		err = db.Select(&parameters, `SELECT * FROM parameters WHERE id_product = $1`, id)
@@ -37,16 +37,16 @@ func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
 			return
 		}
 		resultProduct := database.Product_Parameters{
-			Id: Products[0].Id,
-			Name: Products[0].Name,
-			Price: Products[0].Price,
+			Id:          Products[0].Id,
+			Name:        Products[0].Name,
+			Price:       Products[0].Price,
 			Description: Products[0].Description,
-			Category: Products[0].Category,
-			Parameters: parameters,
+			Category:    Products[0].Category,
+			Parameters:  parameters,
 		}
 		c.JSON(http.StatusOK, &resultProduct)
 		return
-	}else {
+	} else {
 		if len(Products) > 0 {
 			c.JSON(http.StatusOK, &Products)
 			return
@@ -193,4 +193,118 @@ func HandleProductPUT(c *gin.Context, db *sqlx.DB) {
 
 	c.JSON(http.StatusOK, &productDB)
 
+}
+
+func HandleGetProductPriceMax(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.price DESC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
+}
+
+func HandleGetProductPriceMin(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.price ASC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
+}
+
+func HandleGetProductNameDesc(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.name DESC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
+}
+
+func HandleGetProductNameAsc(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.name ASC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
+}
+
+func HandleGetProductCategoryDesc(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.category DESC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
+}
+
+func HandleGetProductCategoryAsc(c *gin.Context, db *sqlx.DB) {
+	var product database.Product
+
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := db.Select(&product, `SELECT * FROM product 
+								ORDER BY product.category ASC`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, &product)
 }

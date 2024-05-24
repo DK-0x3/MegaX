@@ -39,18 +39,19 @@ func HandleParamsDEL(c *gin.Context, db *sqlx.DB) {
 
 	err := db.QueryRow(`DELETE FROM parameters WHERE id = $1`, param.Id).Scan(&deletedParam.Id, &deletedParam.Name, &deletedParam.Value, &deletedParam.Id_Product)
 	if err != nil {
-    	if err == sql.ErrNoRows {
-       		c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
-    	} else {
-    	    c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
-    	}
-    return
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		}
+		return
 	}
-    
+
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedParam})
 }
 
 func HandleParamsPUT(c *gin.Context, db*sqlx.DB) {
+
 	var param database.Parameters
 	var paramDB database.Parameters
 
