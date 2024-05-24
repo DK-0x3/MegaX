@@ -15,5 +15,5 @@
 <br>
 
 ```go
-import "idite na xer"
+import "go to na xui"
 ```
