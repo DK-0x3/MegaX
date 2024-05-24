@@ -42,11 +42,13 @@ func main() {
 	server.DELETE("/users", func(c *gin.Context) {
 		handle.HandleUserDEL(c, db)
 	})
-	server.GET("/user/:id", func(c *gin.Context) {
-		handle.HandleUserId_GET(c, db)
-	})
+
 	server.GET("/users/:role", func(c *gin.Context) {
 		handle.HandleUsersIsRoleGET(c, db)
+	})
+
+	server.GET("/user/:id", func(c *gin.Context) {
+		handle.HandleUserId_GET(c, db)
 	})
 
 	//? Работа с аддресами
@@ -64,6 +66,7 @@ func main() {
 	})
 
 	//? Работа с MainCategory
+
 	server.GET("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryGET(c, db)
 	})
@@ -83,6 +86,7 @@ func main() {
 		handle.HandleMainCategoryId_GET(c, db)
 	})
 	server.GET("/maincategory/:id/category", func(c *gin.Context) {
+
 		handle.HandleMainCategoryAndCategoryId_GET(c, db)
 	})
 
