@@ -13,7 +13,7 @@ var db *sqlx.DB
 
 var server *gin.Engine
 
-const connectionString = "host=127.0.0.1 port=5432 user=postgres password=akeceqm dbname=mega_xxx sslmode=disable"
+const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=mega_xxx sslmode=disable"
 
 func main() {
 	var err error
@@ -42,12 +42,15 @@ func main() {
 	server.DELETE("/users", func(c *gin.Context) {
 		handle.HandleUserDEL(c, db)
 	})
-	server.GET("/user/:id", func(c *gin.Context) {
-		handle.HandleUserId_GET(c, db)
-	})
+
 	server.GET("/users/:role", func(c *gin.Context) {
 		handle.HandleUsersIsRoleGET(c, db)
 	})
+
+	server.GET("/user/:id", func (c *gin.Context) {
+		handle.HandleUserId_GET(c, db)
+	})
+
 
 	//? Работа с аддресами
 	server.GET("/addresUser", func(c *gin.Context) {
@@ -64,6 +67,7 @@ func main() {
 	})
 
 	//? Работа с MainCategory
+
 	server.GET("/maincategory", func(c *gin.Context) {
 		handle.HandleMainCategoryGET(c, db)
 	})
@@ -82,7 +86,8 @@ func main() {
 	server.GET("/maincategory/:id", func(c *gin.Context) {
 		handle.HandleMainCategoryId_GET(c, db)
 	})
-	server.GET("/maincategory/:id/category", func(c *gin.Context) {
+	server.GET("/maincategory/:id/category", func (c *gin.Context) {
+
 		handle.HandleMainCategoryAndCategoryId_GET(c, db)
 	})
 

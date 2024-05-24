@@ -50,7 +50,8 @@ func HandleParamsDEL(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedParam})
 }
 
-func HandleParamsPUT(c *gin.Context, db *sqlx.DB) {
+func HandleParamsPUT(c *gin.Context, db*sqlx.DB) {
+
 	var param database.Parameters
 	var paramDB database.Parameters
 
