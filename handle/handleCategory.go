@@ -102,6 +102,11 @@ func HandleCategoryPUT(c *gin.Context, db *sqlx.DB) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
+
+	_, err = db.Exec(`UPDATE category SET name = $1,main_category=$2  WHERE id = $3`, categoryDB.Name, categoryDB.Main_Category, category.Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+    return
 	}
 	_, err = db.Exec(`UPDATE category SET name = $1,main_category=$2  WHERE id = $3`, categoryDB.Name, categoryDB.Main_Category, category.Id)
 	if err != nil {
