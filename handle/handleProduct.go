@@ -2,7 +2,9 @@ package handle
 
 import (
 	"MegaX/database"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
@@ -11,20 +13,42 @@ import (
 // ? Запросы для product
 
 func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
+	var Products []database.Product
 
-	if err := c.ShouldBindJSON(&product); err != nil {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = db.Select(&Products, `SELECT * FROM product WHERE id = $1`, id)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
-
-	err := db.Get(&product, `SELECT id FROM product WHERE name = $1`, product.Name)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+	
+	params := c.Param("params")
+	
+	if params == "true" {
+		var parameters []database.Parameters
+		err = db.Select(&parameters, `SELECT * FROM parameters WHERE id_product = $1`, id)
+		resultProduct := database.Product_Parameters{
+			Id: Products[0].Id,
+			Name: Products[0].Name,
+			Price: Products[0].Price,
+			Description: Products[0].Description,
+			Category: Products[0].Category,
+			Parameters: parameters,
+		}
+		c.JSON(http.StatusOK, &resultProduct)
 		return
+	}else {
+		if len(Products) > 0 {
+			c.JSON(http.StatusOK, &Products)
+			return
+		}
 	}
-
-	c.JSON(http.StatusOK, product)
+	c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("There is NO such Product with id = %d", id)})
 }
 
 func HandleProductGETCategory(c *gin.Context, db *sqlx.DB) {

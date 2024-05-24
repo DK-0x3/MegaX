@@ -27,7 +27,6 @@ func HandleUsersGET(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, users)
 }
 
-
 func HandleUsersAndAddres_GET(c *gin.Context, db *sqlx.DB) {
 	var users []database.User
 	var Address []database.Addres_User
@@ -63,6 +62,19 @@ func HandleUsersAndAddres_GET(c *gin.Context, db *sqlx.DB) {
 	}
 
 	c.JSON(http.StatusOK, &UserAdres)
+}
+
+func HandleUsersIsRoleGET(c *gin.Context, db *sqlx.DB) {
+	var users []database.User
+
+	role := c.Param("role")
+	err := db.Select(&users, `SELECT * FROM users WHERE role = $1`, role)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
 }
 
 func HandleUserPOST(c *gin.Context, db *sqlx.DB) {

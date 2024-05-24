@@ -58,6 +58,22 @@ type Product struct {
 	Category    int    `db:"category"`
 }
 
+type Parameters struct {
+	Id int  	`db:"id"`
+	Name string  	`db:"name"`
+	Value string  	`db:"value"`
+	Id_Product int   	`db:"id_product"`
+}
+
+type Product_Parameters struct {
+	Id          int
+	Name        string
+	Price       int
+	Description string
+	Category    int
+	Parameters []Parameters
+}
+
 type IPResponse struct {
 	IP string `json:"ip"`
 }

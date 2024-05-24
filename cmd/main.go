@@ -13,7 +13,7 @@ var db *sqlx.DB
 
 var server *gin.Engine
 
-const connectionString = "host=127.0.0.1 port=5432 user=postgres password=akeceqm dbname=mega_xxx sslmode=disable"
+const connectionString = "host=127.0.0.1 port=5432 user=postgres password=123456 dbname=mega_xxx sslmode=disable"
 
 func main() {
 	var err error
@@ -44,6 +44,9 @@ func main() {
 	})
 	server.GET("/user/:id", func (c *gin.Context) {
 		handle.HandleUserId_GET(c, db)
+	})
+	server.GET("/users/:role", func (c *gin.Context) {
+		handle.HandleUsersIsRoleGET(c, db)
 	})
 
 
@@ -105,7 +108,10 @@ func main() {
 	server.GET("/product", func(c *gin.Context) {
 		handle.HandleProductGET(c, db)
 	})
-	server.GET("/productId", func(c *gin.Context) {
+	server.GET("/product/:id", func(c *gin.Context) {
+		handle.HandleProductGETid(c, db)
+	})
+	server.GET("/product/:id/:params", func(c *gin.Context) {
 		handle.HandleProductGETid(c, db)
 	})
 	server.GET("/productCategory", func(c *gin.Context) {
@@ -123,6 +129,16 @@ func main() {
 	server.PUT("/product", func(c *gin.Context) {
 		handle.HandleProductPUT(c, db)
 	})
+	server.POST("/product/params", func(c *gin.Context) {
+		handle.HandleParamsPOST(c, db)
+	})
+	server.DELETE("/product/params", func(c *gin.Context) {
+		handle.HandleParamsDEL(c, db)
+	})
+	server.PUT("/product/params", func(c *gin.Context) {
+		handle.HandleParamsPUT(c, db)
+	})
+
 	server.Run(":8080")
 
 }
