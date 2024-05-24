@@ -112,7 +112,7 @@ func HandleUserDEL(c *gin.Context, db *sqlx.DB) {
     	} else {
     	    c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
     	}
-    return
+    	return
 	}
     
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedUser})
