@@ -28,7 +28,9 @@ type User_Addr struct {
 	Password string
 	Name     string
 	Surname  string
-	Id_Addr  Addres_User
+	Addres  Addres_User
+	Role     string
+	IpAddres sql.NullString
 }
 
 type Main_Category struct {
@@ -42,12 +44,34 @@ type Category struct {
 	Main_Category int    `db:"main_category"`
 }
 
+type Main_CategoryAndCategory struct {
+	Id   int
+	Name string
+	Categories []Category
+}
+
 type Product struct {
 	Id          int    `db:"id"`
 	Name        string `db:"name"`
 	Price       int    `db:"price"`
 	Description string `db:"description"`
 	Category    int    `db:"category"`
+}
+
+type Parameters struct {
+	Id int  	`db:"id"`
+	Name string  	`db:"name"`
+	Value string  	`db:"value"`
+	Id_Product int   	`db:"id_product"`
+}
+
+type Product_Parameters struct {
+	Id          int
+	Name        string
+	Price       int
+	Description string
+	Category    int
+	Parameters []Parameters
 }
 
 type IPResponse struct {
