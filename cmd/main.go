@@ -46,12 +46,9 @@ func main() {
 	server.GET("/users/:role", func(c *gin.Context) {
 		handle.HandleUsersIsRoleGET(c, db)
 	})
-
-	server.GET("/user/:id", func (c *gin.Context) {
+	server.GET("/user/:id", func(c *gin.Context) {
 		handle.HandleUserId_GET(c, db)
 	})
-
-
 	//? Работа с аддресами
 	server.GET("/addresUser", func(c *gin.Context) {
 		handle.HandleAddresGET(c, db)
@@ -86,8 +83,8 @@ func main() {
 	server.GET("/maincategory/:id", func(c *gin.Context) {
 		handle.HandleMainCategoryId_GET(c, db)
 	})
-	server.GET("/maincategory/:id/category", func (c *gin.Context) {
 
+	server.GET("/maincategory/:id/category", func(c *gin.Context) {
 		handle.HandleMainCategoryAndCategoryId_GET(c, db)
 	})
 
