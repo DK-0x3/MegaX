@@ -32,6 +32,10 @@ func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
 	if params == "true" {
 		var parameters []database.Parameters
 		err = db.Select(&parameters, `SELECT * FROM parameters WHERE id_product = $1`, id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
+			return
+		}
 		resultProduct := database.Product_Parameters{
 			Id: Products[0].Id,
 			Name: Products[0].Name,
