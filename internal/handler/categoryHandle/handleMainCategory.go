@@ -1,7 +1,7 @@
-package handle
+package categoryHandle
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -14,7 +14,7 @@ import (
 // ? Запросы для MainCategory
 
 func HandleMainCategoryGET(c *gin.Context, db *sqlx.DB) {
-	var MainCat []database.Main_Category
+	var MainCat []models.Main_Category
 
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
@@ -25,7 +25,8 @@ func HandleMainCategoryGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleMainCategoryPOST(c *gin.Context, db *sqlx.DB) {
-	var MainCat database.Main_Category
+
+	var MainCat models.Main_Category
 
 	if err := c.ShouldBindJSON(&MainCat); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Error: ": err.Error()})
@@ -43,8 +44,8 @@ func HandleMainCategoryPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleMainCategoryPUT(c *gin.Context, db *sqlx.DB) {
-	var MainCat database.Main_Category
-	var MainCatDB database.Main_Category
+	var MainCat models.Main_Category
+	var MainCatDB models.Main_Category
 
 	if err := c.ShouldBindJSON(&MainCat); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -72,56 +73,56 @@ func HandleMainCategoryPUT(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleMainCategoryDEL(c *gin.Context, db *sqlx.DB) {
-	var MainCat database.Main_Category
+	var MainCat models.Main_Category
 
 	if err := c.ShouldBindJSON(&MainCat); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
 
-	var deletedCategory database.Main_Category
+	var deletedCategory models.Main_Category
 
 	err := db.QueryRow(`DELETE FROM main_category WHERE id = $1 RETURNING id, name`, MainCat.Id).Scan(&deletedCategory.Id, &deletedCategory.Name)
 	if err != nil {
-    	if err == sql.ErrNoRows {
-       		c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
-    	} else {
-    	    c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
-    	}
-    return
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		}
+		return
 	}
-    
+
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedCategory})
 }
 
 func HandleMainCategoryAndCategory(c *gin.Context, db *sqlx.DB) {
-	var MainCat []database.Main_Category
-	var Cat []database.Category
-	var MainCatAndCat []database.Main_CategoryAndCategory
+	var MainCat []models.Main_Category
+	var Cat []models.Category
+	var MainCatAndCat []models.Main_CategoryAndCategory
 
-	err := db.Select(&MainCat, `SELECT * FROM main_category`) 
+	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
 	}
 
-	err = db.Select(&Cat, `SELECT * FROM category`) 
+	err = db.Select(&Cat, `SELECT * FROM category`)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
 	}
 
 	for _, mainVal := range MainCat {
-		var CategoryIsMainCat []database.Category
+		var CategoryIsMainCat []models.Category
 
 		for _, Val := range Cat {
 			if Val.Main_Category == mainVal.Id {
 				CategoryIsMainCat = append(CategoryIsMainCat, Val)
 			}
 		}
-		MainCatAndCat = append(MainCatAndCat, database.Main_CategoryAndCategory{
-			Id: mainVal.Id,
-			Name: mainVal.Name,
+		MainCatAndCat = append(MainCatAndCat, models.Main_CategoryAndCategory{
+			Id:         mainVal.Id,
+			Name:       mainVal.Name,
 			Categories: CategoryIsMainCat,
 		})
 	}
@@ -130,7 +131,7 @@ func HandleMainCategoryAndCategory(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleMainCategoryId_GET(c *gin.Context, db *sqlx.DB) {
-	var MainCat []database.Main_Category
+	var MainCat []models.Main_Category
 
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
@@ -154,8 +155,8 @@ func HandleMainCategoryId_GET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleMainCategoryAndCategoryId_GET(c *gin.Context, db *sqlx.DB) {
-	var MainCat []database.Main_Category
-	var Cat []database.Category
+	var MainCat []models.Main_Category
+	var Cat []models.Category
 
 	err := db.Select(&MainCat, `SELECT * FROM main_category`)
 	if err != nil {
@@ -168,7 +169,7 @@ func HandleMainCategoryAndCategoryId_GET(c *gin.Context, db *sqlx.DB) {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
-	
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -177,16 +178,16 @@ func HandleMainCategoryAndCategoryId_GET(c *gin.Context, db *sqlx.DB) {
 
 	for _, mainVal := range MainCat {
 		if mainVal.Id == id {
-			var cateforyis []database.Category
+			var cateforyis []models.Category
 
 			for _, val := range Cat {
 				if val.Main_Category == mainVal.Id {
 					cateforyis = append(cateforyis, val)
 				}
 			}
-			var result = database.Main_CategoryAndCategory{
-				Id: mainVal.Id,
-				Name: mainVal.Name,
+			var result = models.Main_CategoryAndCategory{
+				Id:         mainVal.Id,
+				Name:       mainVal.Name,
 				Categories: cateforyis,
 			}
 			c.JSON(http.StatusOK, &result)

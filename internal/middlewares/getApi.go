@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -18,7 +18,7 @@ func GetApi() string {
 		log.Println(err)
 	}
 
-	var ipResp database.IPResponse
+	var ipResp models.IPResponse
 	err = json.Unmarshal(data, &ipResp)
 	if err != nil {
 		return ""

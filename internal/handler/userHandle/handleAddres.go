@@ -1,7 +1,7 @@
-package handle
+package userHandle
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 
 // ?Запросы для Addres
 func HandleAddresGET(c *gin.Context, db *sqlx.DB) {
-	var addres []database.Addres_User
+	var addres []models.Addres_User
 
 	err := db.Select(&addres, `Select * FROM addres_user`)
 	if err != nil {
@@ -21,7 +21,7 @@ func HandleAddresGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleAddresPOST(c *gin.Context, db *sqlx.DB) {
-	var addres database.Addres_User
+	var addres models.Addres_User
 
 	if err := c.ShouldBindJSON(&addres); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -38,7 +38,7 @@ func HandleAddresPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleAddresDEL(c *gin.Context, db *sqlx.DB) {
-	var addres database.Addres_User
+	var addres models.Addres_User
 
 	if err := c.ShouldBindJSON(&addres); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -73,8 +73,8 @@ func HandleAddresDEL(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleAddresPUT(c *gin.Context, db *sqlx.DB) {
-	var addres database.Addres_User
-	var addresDB database.Addres_User
+	var addres models.Addres_User
+	var addresDB models.Addres_User
 
 	if err := c.ShouldBindJSON(&addres); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})

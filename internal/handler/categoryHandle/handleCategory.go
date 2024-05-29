@@ -1,7 +1,7 @@
-package handle
+package categoryHandle
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 // ? Запросы для category
 
 func HandleCategoryGETid(c *gin.Context, db *sqlx.DB) {
-	var category database.Category
+	var category models.Category
 
 	if err := c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -27,9 +27,8 @@ func HandleCategoryGETid(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, category)
 }
 
-
 func HandleCategoryGET(c *gin.Context, db *sqlx.DB) {
-	var category []database.Category
+	var category []models.Category
 
 	err := db.Select(&category, `SELECT * FROM category`)
 	if err != nil {
@@ -41,7 +40,7 @@ func HandleCategoryGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleCategoryPOST(c *gin.Context, db *sqlx.DB) {
-	var category database.Category
+	var category models.Category
 
 	if err := c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -59,7 +58,7 @@ func HandleCategoryPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleCategoryDEL(c *gin.Context, db *sqlx.DB) {
-	var category database.Category
+	var category models.Category
 
 	if err := c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -76,8 +75,8 @@ func HandleCategoryDEL(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleCategoryPUT(c *gin.Context, db *sqlx.DB) {
-	var category database.Category
-	var categoryDB database.Category
+	var category models.Category
+	var categoryDB models.Category
 
 	if err := c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -106,12 +105,12 @@ func HandleCategoryPUT(c *gin.Context, db *sqlx.DB) {
 	_, err = db.Exec(`UPDATE category SET name = $1,main_category=$2  WHERE id = $3`, categoryDB.Name, categoryDB.Main_Category, category.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
-    return
+		return
 	}
 	_, err = db.Exec(`UPDATE category SET name = $1,main_category=$2  WHERE id = $3`, categoryDB.Name, categoryDB.Main_Category, category.Id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
-    return
+		return
 	}
 
 	c.JSON(http.StatusOK, &categoryDB)

@@ -1,7 +1,7 @@
-package handle
+package productHandle
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"database/sql"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 )
 
 func HandleParamsPOST(c *gin.Context, db *sqlx.DB) {
-	var param database.Parameters
+	var param models.Parameters
 
 	if err := c.ShouldBindJSON(&param); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -28,14 +28,14 @@ func HandleParamsPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleParamsDEL(c *gin.Context, db *sqlx.DB) {
-	var param database.Parameters
+	var param models.Parameters
 
 	if err := c.ShouldBindJSON(&param); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
 
-	var deletedParam database.Parameters
+	var deletedParam models.Parameters
 
 	err := db.QueryRow(`DELETE FROM parameters WHERE id = $1`, param.Id).Scan(&deletedParam.Id, &deletedParam.Name, &deletedParam.Value, &deletedParam.Id_Product)
 	if err != nil {
@@ -50,10 +50,10 @@ func HandleParamsDEL(c *gin.Context, db *sqlx.DB) {
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedParam})
 }
 
-func HandleParamsPUT(c *gin.Context, db*sqlx.DB) {
+func HandleParamsPUT(c *gin.Context, db *sqlx.DB) {
 
-	var param database.Parameters
-	var paramDB database.Parameters
+	var param models.Parameters
+	var paramDB models.Parameters
 
 	if err := c.ShouldBindJSON(&param); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})

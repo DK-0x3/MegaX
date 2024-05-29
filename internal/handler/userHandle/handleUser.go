@@ -1,8 +1,8 @@
-package handle
+package userHandle
 
 import (
-	"MegaX/database"
-	"MegaX/middlewares"
+	"MegaX/internal/database/models"
+	"MegaX/internal/middlewares"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -15,7 +15,7 @@ import (
 
 // ? Запросы для Users
 func HandleUsersGET(c *gin.Context, db *sqlx.DB) {
-	var users []database.User
+	var users []models.User
 	//users = make([]database.User, 0)
 
 	err := db.Select(&users, `SELECT * FROM users`)
@@ -28,9 +28,9 @@ func HandleUsersGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleUsersAndAddres_GET(c *gin.Context, db *sqlx.DB) {
-	var users []database.User
-	var Address []database.Addres_User
-	var UserAdres []database.User_Addr
+	var users []models.User
+	var Address []models.Addres_User
+	var UserAdres []models.User_Addr
 
 	err := db.Select(&users, `SELECT * FROM users`)
 	if err != nil {
@@ -43,19 +43,19 @@ func HandleUsersAndAddres_GET(c *gin.Context, db *sqlx.DB) {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
 		return
 	}
-	
+
 	for _, user := range users {
 		for _, addr := range Address {
 			if addr.Id == int(user.Id_Addr.Int32) {
-				UserAdres = append(UserAdres, database.User_Addr{
-					Id: user.Id,
-					Phone: user.Phone,
+				UserAdres = append(UserAdres, models.User_Addr{
+					Id:       user.Id,
+					Phone:    user.Phone,
 					Password: user.Password,
-					Name: user.Name,
-					Surname: user.Surname,
-					Role: user.Role,
+					Name:     user.Name,
+					Surname:  user.Surname,
+					Role:     user.Role,
 					IpAddres: user.IpAddres,
-					Addres: addr,
+					Addres:   addr,
 				})
 			}
 		}
@@ -65,7 +65,7 @@ func HandleUsersAndAddres_GET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleUsersIsRoleGET(c *gin.Context, db *sqlx.DB) {
-	var users []database.User
+	var users []models.User
 
 	role := c.Param("role")
 	err := db.Select(&users, `SELECT * FROM users WHERE role = $1`, role)
@@ -78,7 +78,7 @@ func HandleUsersIsRoleGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleUserPOST(c *gin.Context, db *sqlx.DB) {
-	var user database.User
+	var user models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -96,31 +96,31 @@ func HandleUserPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleUserDEL(c *gin.Context, db *sqlx.DB) {
-	var user database.User
+	var user models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 		return
 	}
 
-	var deletedUser database.User
+	var deletedUser models.User
 
 	err := db.QueryRow(`DELETE FROM users WHERE id = $1`, user.Id).Scan(&deletedUser.Id, &deletedUser.Name)
 	if err != nil {
-    	if err == sql.ErrNoRows {
-       		c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
-    	} else {
-    	    c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
-    	}
-    	return
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"Error": "No rows found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"Error": err.Error()})
+		}
+		return
 	}
-    
+
 	c.JSON(http.StatusOK, gin.H{"Deleted_Maincategory": deletedUser})
 }
 
 func HandleUserPUT(c *gin.Context, db *sqlx.DB) {
-	var user database.User
-	var userDB database.User
+	var user models.User
+	var userDB models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -163,7 +163,7 @@ func HandleUserPUT(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleUserId_GET(c *gin.Context, db *sqlx.DB) {
-	var Users []database.User_Addr
+	var Users []models.User_Addr
 
 	err := db.Select(&Users, `SELECT * FROM users`)
 	if err != nil {

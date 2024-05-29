@@ -1,7 +1,7 @@
-package handle
+package productHandle
 
 import (
-	"MegaX/database"
+	"MegaX/internal/database/models"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -13,7 +13,7 @@ import (
 // ? Запросы для product
 
 func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
-	var Products []database.Product
+	var Products []models.Product
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -30,13 +30,13 @@ func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
 	params := c.Param("params")
 
 	if params == "true" {
-		var parameters []database.Parameters
+		var parameters []models.Parameters
 		err = db.Select(&parameters, `SELECT * FROM parameters WHERE id_product = $1`, id)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
 			return
 		}
-		resultProduct := database.Product_Parameters{
+		resultProduct := models.Product_Parameters{
 			Id:          Products[0].Id,
 			Name:        Products[0].Name,
 			Price:       Products[0].Price,
@@ -56,7 +56,7 @@ func HandleProductGETid(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductGETCategory(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
+	var product models.Product
 
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -75,7 +75,7 @@ func HandleProductGETCategory(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductGETMainCategory(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
+	var product models.Product
 
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -95,7 +95,7 @@ func HandleProductGETMainCategory(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductGET(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product`)
 	if err != nil {
@@ -107,7 +107,7 @@ func HandleProductGET(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductPOST(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
+	var product models.Product
 
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -138,7 +138,7 @@ func HandleProductPOST(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductDEL(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
+	var product models.Product
 
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -155,8 +155,8 @@ func HandleProductDEL(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleProductPUT(c *gin.Context, db *sqlx.DB) {
-	var product database.Product
-	var productDB database.Product
+	var product models.Product
+	var productDB models.Product
 
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Error: ": err.Error()})
@@ -196,7 +196,7 @@ func HandleProductPUT(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductPriceMax(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.price DESC`)
@@ -210,7 +210,7 @@ func HandleGetProductPriceMax(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductPriceMin(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.price ASC`)
@@ -224,7 +224,7 @@ func HandleGetProductPriceMin(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductNameDesc(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.name DESC`)
@@ -238,7 +238,7 @@ func HandleGetProductNameDesc(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductNameAsc(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.name ASC`)
@@ -252,7 +252,7 @@ func HandleGetProductNameAsc(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductCategoryDesc(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.category DESC`)
@@ -266,7 +266,7 @@ func HandleGetProductCategoryDesc(c *gin.Context, db *sqlx.DB) {
 }
 
 func HandleGetProductCategoryAsc(c *gin.Context, db *sqlx.DB) {
-	var product []database.Product
+	var product []models.Product
 
 	err := db.Select(&product, `SELECT * FROM product 
 								ORDER BY product.category ASC`)
